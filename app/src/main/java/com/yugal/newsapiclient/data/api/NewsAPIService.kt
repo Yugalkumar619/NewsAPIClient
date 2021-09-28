@@ -1,7 +1,9 @@
 package com.yugal.newsapiclient.data.api
 
 
+import android.provider.Settings.Global.getString
 import com.yugal.newsapiclient.BuildConfig
+import com.yugal.newsapiclient.R
 import com.yugal.newsapiclient.data.model.APIResponse
 import retrofit2.Response
 import retrofit2.http.GET
