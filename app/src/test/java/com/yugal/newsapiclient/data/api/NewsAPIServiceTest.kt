@@ -44,6 +44,30 @@ class NewsAPIServiceTest {
             val responseBody = service.getTopHeadlines("us",1).body()
             val request = server.takeRequest()
             assertThat(responseBody).isNotNull()
+            assertThat(request.path).isEqualTo("/v2/top-headlines?country=us&page=1&apiKey=bd4c0607c9a04093a152f0d604fa95d5")
+        }
+    }
+
+    @Test
+    fun getTopHeadlines_receivedResponse_correctPageSize(){
+        runBlocking {
+            enqueueMockResponse("newsresponse.json")
+            val responseBody = service.getTopHeadlines("us",1).body()
+            val articlesList = responseBody!!.articles
+            assertThat(articlesList.size).isEqualTo(20)
+        }
+    }
+
+    @Test
+    fun getTopHeadlines_receivedResponse_correctContent(){
+        runBlocking {
+            enqueueMockResponse("newsresponse.json")
+            val responseBody = service.getTopHeadlines("us",1).body()
+            val articlesList = responseBody!!.articles
+            val article = articlesList[0]
+            assertThat(article.author).isEqualTo("Adam Berry")
+            assertThat(article.url).isEqualTo("https://www.mlb.com/news/rays-clinch-al-top-seed-home-field-advantage")
+            assertThat(article.publishedAt).isEqualTo("2021-09-30T03:47:54Z")
         }
     }
 
