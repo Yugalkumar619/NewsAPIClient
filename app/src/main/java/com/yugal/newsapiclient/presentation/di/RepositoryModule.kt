@@ -1,5 +1,6 @@
 package com.yugal.newsapiclient.presentation.di
 
+import com.yugal.newsapiclient.data.api.NewsAPIService
 import com.yugal.newsapiclient.data.repository.NewsRepositoryImpl
 import com.yugal.newsapiclient.data.repository.dataSourceImpl.NewsRemoteDataSourceImpl
 import com.yugal.newsapiclient.domain.repository.NewsRepository
@@ -20,4 +21,8 @@ class RepositoryModule {
     ): NewsRepository{
         return NewsRepositoryImpl(newsRemoteDataSource)
     }
+
+
+
+
 }

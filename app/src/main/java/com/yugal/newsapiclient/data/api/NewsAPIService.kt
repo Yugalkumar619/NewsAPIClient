@@ -20,4 +20,6 @@ interface NewsAPIService {
         @Query("apiKey")
         apiKey:String = BuildConfig.API_KEY
     ): Response<APIResponse>
+
+
 }

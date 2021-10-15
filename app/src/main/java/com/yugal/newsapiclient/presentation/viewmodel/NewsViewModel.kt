@@ -13,11 +13,13 @@ import com.yugal.newsapiclient.data.util.Resource
 import com.yugal.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class NewsViewModel(
     private val app:Application,
-    val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
+    private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
 ) : AndroidViewModel(app) {
+
     val newsHeadLines: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
 
     fun getNewsHeadLines(country:String, page:Int) = viewModelScope.launch(Dispatchers.IO){
