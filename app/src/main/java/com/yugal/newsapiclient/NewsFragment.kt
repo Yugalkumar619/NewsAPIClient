@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,9 @@ import com.yugal.newsapiclient.databinding.FragmentNewsBinding
 import com.yugal.newsapiclient.presentation.adapter.NewsAdapter
 import com.yugal.newsapiclient.presentation.viewmodel.NewsViewModel
 import dagger.hilt.EntryPoint
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class NewsFragment : Fragment() {
     private lateinit var viewModel: NewsViewModel
@@ -49,6 +53,8 @@ class NewsFragment : Fragment() {
         }
         initRecyclerView()
         viewNewsList()
+        setSearchView()
+
     }
 
     private fun viewNewsList() {
@@ -125,5 +131,71 @@ class NewsFragment : Fragment() {
             }
 
         }
+    }
+
+    //search
+    private fun setSearchView(){
+        fragmentNewsBinding.svNews.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    viewModel.searchNews("us",p0.toString(),page)
+                    viewSearchNews()
+                    return false
+                }
+
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    MainScope().launch {
+                        delay(2000)
+                        viewModel.searchNews("us",p0.toString(),page)
+                        viewSearchNews()
+
+                    }
+
+                    return false
+                }
+
+            })
+        fragmentNewsBinding.svNews.setOnCloseListener(
+            object :SearchView.OnCloseListener{
+                override fun onClose(): Boolean {
+                    initRecyclerView()
+                    viewNewsList()
+                    return false
+                }
+
+            })
+    }
+
+
+
+
+    fun viewSearchNews(){
+        viewModel.getNewsHeadLines(country, page)
+        viewModel.searchedNews.observe(viewLifecycleOwner,{response->
+            when(response){
+                is com.yugal.newsapiclient.data.util.Resource.Success->{
+                    hideProgressBar()
+                    response.data?.let {
+                        newsAdapter.differ.submitList(it.articles.toList())
+                        val message = it.articles.toList()
+                        if(it.totalResults%20 == 0) {
+                            val pages = it.totalResults / 20
+                        }else{
+                            pages = it.totalResults/20+1
+                        }
+                        isLastPage = page == pages
+                    }
+                }
+                is com.yugal.newsapiclient.data.util.Resource.Error->{
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(activity,"An error occurred : $it", Toast.LENGTH_LONG).show()
+                    }
+                }
+                is com.yugal.newsapiclient.data.util.Resource.Loading->{
+                    showProgressBar()
+                }
+            }
+        })
     }
 }
