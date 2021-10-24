@@ -2,6 +2,7 @@ package com.yugal.newsapiclient.data.repository
 
 import com.yugal.newsapiclient.data.model.APIResponse
 import com.yugal.newsapiclient.data.model.Article
+import com.yugal.newsapiclient.data.repository.dataSource.NewsLocalDataSource
 import com.yugal.newsapiclient.data.repository.dataSource.NewsRemoteDataSource
 import com.yugal.newsapiclient.data.util.Resource
 import com.yugal.newsapiclient.domain.repository.NewsRepository
@@ -10,6 +11,7 @@ import retrofit2.Response
 
 class NewsRepositoryImpl(
     private val newsRemoteDataSource: NewsRemoteDataSource,
+    private val newsLocalDataSource: NewsLocalDataSource
 ):NewsRepository {
     override suspend fun getNewsHeadlines(country: String, page : Int): Resource<APIResponse> {
         return responseToResource(newsRemoteDataSource.getTopHeadlines(country,page))
@@ -36,7 +38,7 @@ class NewsRepositoryImpl(
 
 
     override suspend fun saveNews(article: Article) {
-        TODO("Not yet implemented")
+        newsLocalDataSource.saveArticleToDB(article)
     }
 
     override suspend fun deleteNews(article: Article) {

@@ -2,6 +2,7 @@ package com.yugal.newsapiclient.presentation.di
 
 import com.yugal.newsapiclient.data.api.NewsAPIService
 import com.yugal.newsapiclient.data.repository.NewsRepositoryImpl
+import com.yugal.newsapiclient.data.repository.dataSource.NewsLocalDataSource
 import com.yugal.newsapiclient.data.repository.dataSourceImpl.NewsRemoteDataSourceImpl
 import com.yugal.newsapiclient.domain.repository.NewsRepository
 import dagger.Module
@@ -17,9 +18,12 @@ class RepositoryModule {
     @Singleton
     @Provides
     fun provideNewsRepository(
-        newsRemoteDataSource: NewsRemoteDataSourceImpl
+        newsRemoteDataSource: NewsRemoteDataSourceImpl,
+        newsLocalDataSource: NewsLocalDataSource
     ): NewsRepository{
-        return NewsRepositoryImpl(newsRemoteDataSource)
+        return NewsRepositoryImpl(newsRemoteDataSource,
+        newsLocalDataSource
+        )
     }
 
 
