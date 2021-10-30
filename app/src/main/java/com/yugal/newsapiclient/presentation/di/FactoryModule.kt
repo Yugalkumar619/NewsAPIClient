@@ -1,9 +1,7 @@
 package com.yugal.newsapiclient.presentation.di
 
 import android.app.Application
-import com.yugal.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
-import com.yugal.newsapiclient.domain.usecase.GetSearchedNewsUseCase
-import com.yugal.newsapiclient.domain.usecase.SaveNewsUseCase
+import com.yugal.newsapiclient.domain.usecase.*
 import com.yugal.newsapiclient.presentation.viewmodel.NewsViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -21,13 +19,17 @@ class FactoryModule {
       application: Application,
       getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
       getSearchedNewsUseCase: GetSearchedNewsUseCase,
-      saveNewsUseCase: SaveNewsUseCase
+      saveNewsUseCase: SaveNewsUseCase,
+      getSaveNewsUseCase: GetSavedNewsUseCase,
+      deleteSavedNewsUseCase: DeleteSavedNewsUseCase
     ):NewsViewModelFactory{
         return NewsViewModelFactory(
             application,
             getNewsHeadlinesUseCase,
             getSearchedNewsUseCase,
-            saveNewsUseCase
+            saveNewsUseCase,
+            getSaveNewsUseCase,
+            deleteSavedNewsUseCase
         )
     }
 }

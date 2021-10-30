@@ -1,9 +1,7 @@
 package com.yugal.newsapiclient.presentation.di
 
 import com.yugal.newsapiclient.domain.repository.NewsRepository
-import com.yugal.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
-import com.yugal.newsapiclient.domain.usecase.GetSearchedNewsUseCase
-import com.yugal.newsapiclient.domain.usecase.SaveNewsUseCase
+import com.yugal.newsapiclient.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,5 +34,21 @@ class UseCaseModule {
         newsRepository: NewsRepository
     ):SaveNewsUseCase{
         return SaveNewsUseCase(newsRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetSavedNewsUseCase(
+        newsRepository: NewsRepository
+    ):GetSavedNewsUseCase{
+        return GetSavedNewsUseCase(newsRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDeleteSavedNewsUseCase(
+        newsRepository: NewsRepository
+    ):DeleteSavedNewsUseCase{
+        return DeleteSavedNewsUseCase(newsRepository)
     }
 }

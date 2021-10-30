@@ -38,7 +38,7 @@ class InfoFragment : Fragment() {
                 loadUrl(article.url)
             }
         }
-        fragmentInfoBinding.favSave.setOnClickListener{
+        fragmentInfoBinding.floatingActionButton.setOnClickListener{
             viewModel.saveArticle(article)
             Snackbar.make(view,"Saved Successfully!",Snackbar.LENGTH_LONG).show()
         }
